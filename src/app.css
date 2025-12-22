@@ -1,0 +1,108 @@
+/* src\app.css */
+/* --- Variables --- */
+:root {
+  --primary-orange: #C35831;
+  --primary-orange-hover: #a64624;
+  --primary-bg: #fffcfb;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(195, 88, 49, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(195, 88, 49, 0.1);
+  --color-text-main: #2d140b;
+  --blob-color-1: #ffe8e0;
+  --blob-color-2: #fff2ee;
+}
+
+[data-bs-theme="dark"] {
+  --primary-bg: #1a0d08;
+  --glass-bg: rgba(45, 20, 11, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --color-text-main: #fcf4f1;
+  --blob-color-1: #3d1b10;
+  --blob-color-2: #2d140b;
+}
+
+/* --- Global Styles --- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--color-text-main);
+  transition: all 0.4s ease;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* --- Floating Background Blobs --- */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: floatBlob 15s infinite alternate ease-in-out;
+}
+body::before { background: var(--blob-color-1); top: -10%; left: -10%; }
+body::after { background: var(--blob-color-2); bottom: -10%; right: -10%; animation-delay: -7s; }
+
+@keyframes floatBlob {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 40px) scale(1.1); }
+}
+
+/* --- Glassmorphism --- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card {
+  border-radius: 30px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(195, 88, 49, 0.15);
+}
+
+/* --- Buttons --- */
+.btn-pearl {
+  background-color: var(--primary-orange);
+  color: white;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  padding: 10px 24px;
+  transition: all 0.3s ease;
+}
+
+.btn-pearl:hover {
+  background-color: var(--primary-orange-hover);
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(195, 88, 49, 0.3);
+  color: white;
+}
+
+/* --- Navbar & Links --- */
+.nav-link-custom {
+  color: var(--color-text-main);
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+}
+
+.nav-link-custom:hover {
+  color: var(--primary-orange);
+  background: rgba(195, 88, 49, 0.08);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: var(--primary-orange); border-radius: 10px; }
