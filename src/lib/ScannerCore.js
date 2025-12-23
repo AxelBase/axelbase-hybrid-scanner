@@ -14,20 +14,17 @@ let batchResults = [];
 let codeReader = null;
 let lastQrData = null;
 let lastBarcodeData = null;
-let lastProcessedSecret = null; // Prevent duplicate processing of same code
+let lastProcessedSecret = null;
 
 const MASTER_KEY = getAxelFragment() + get2025Fragment() + getHybridFragment() + getKeyFragment();
 
 export function initScanner(videoEl, canvasEl) {
-  console.log('[initScanner] Called');
   try {
     video = videoEl;
     canvas = canvasEl;
     ctx = canvas.getContext('2d');
-    console.log('[initScanner] Context obtained');
 
     if (typeof ZXing === 'undefined' || typeof ZXing.BrowserMultiFormatReader === 'undefined') {
-      console.warn('[initScanner] ZXing not loaded');
       return;
     }
 
@@ -38,18 +35,13 @@ export function initScanner(videoEl, canvasEl) {
     hints.set(ZXing.DecodeHintType.ASSUME_CODE_IN_LANDSCAPE, true);
     hints.set(ZXing.DecodeHintType.PURE_BARCODE, true);
     codeReader.hints = hints;
-    console.log('[initScanner] codeReader created');
   } catch (err) {
-    console.error('[initScanner] Error:', err);
+    // Silent in production
   }
 }
 
 export function startScanning(isBatch = false, target = 0) {
-  console.log('[startScanning] Called, isBatch:', isBatch, 'target:', target);
-  if (scanning) {
-    console.log('[startScanning] Already scanning');
-    return;
-  }
+  if (scanning) return;
   scanning = true;
   batchMode = isBatch;
   batchTarget = target || 0;
@@ -57,23 +49,20 @@ export function startScanning(isBatch = false, target = 0) {
   lastQrData = null;
   lastBarcodeData = null;
   lastProcessedSecret = null;
-  console.log('[startScanning] Starting scan loop');
   requestAnimationFrame(scanFrame);
 }
 
 export function stopScanning() {
-  console.log('[stopScanning] Called');
   if (!scanning) return;
   scanning = false;
   if (codeReader) {
     try {
       codeReader.reset();
     } catch (err) {
-      console.error('[stopScanning] Reset error:', err);
+      // Silent
     }
   }
   window.dispatchEvent(new CustomEvent('scanningStopped'));
-  console.log('[stopScanning] Stopped');
 }
 
 function scanFrame() {
@@ -90,14 +79,11 @@ function scanFrame() {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const grayscaleData = toGrayscale(imageData);
 
-    // QR Detection (full frame)
     const qrCode = jsQR(grayscaleData.data, grayscaleData.width, grayscaleData.height);
     if (qrCode && qrCode.data !== lastQrData) {
       lastQrData = qrCode.data;
-      console.log('[scanFrame] New QR detected:', lastQrData);
     }
 
-    // Barcode Detection (bottom half)
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height / 2;
@@ -112,7 +98,6 @@ function scanFrame() {
         .then(result => {
           if (result && result.text.trim() !== lastBarcodeData) {
             lastBarcodeData = result.text.trim();
-            console.log('[scanFrame] New barcode detected:', lastBarcodeData);
           }
         })
         .catch(() => {
@@ -120,18 +105,13 @@ function scanFrame() {
         });
     };
 
-    // Only process when both are present AND we haven't processed this exact pair before
     if (lastQrData && lastBarcodeData) {
       const currentPairKey = lastQrData + '|' + lastBarcodeData;
-      if (currentPairKey !== lastProcessedSecret) {  // Avoid infinite loop on same code
-        console.log('[scanFrame] Valid new pair detected → processing');
+      if (currentPairKey !== lastProcessedSecret) {
         processHybrid(lastQrData, lastBarcodeData);
         lastProcessedSecret = currentPairKey;
-      } else {
-        console.log('[scanFrame] Same code already processed → skipping');
       }
 
-      // Reset for next different code (continuous scanning)
       if (!batchMode) {
         lastQrData = null;
         lastBarcodeData = null;
@@ -139,7 +119,7 @@ function scanFrame() {
       }
     }
   } catch (err) {
-    console.error('[scanFrame] Error:', err);
+    // Silent in production
   }
 
   if (scanning) requestAnimationFrame(scanFrame);
@@ -155,13 +135,9 @@ function toGrayscale(imageData) {
 }
 
 function processHybrid(qrData, barcodeData) {
-  console.log('[processHybrid] Processing:', qrData, barcodeData);
   try {
     const parts = qrData.split('|');
-    if (parts.length !== 2) {
-      console.log('[processHybrid] Invalid QR format');
-      return;
-    }
+    if (parts.length !== 2) return;
 
     const saltHex = parts[0];
     const cipherPart1 = parts[1];
@@ -191,15 +167,13 @@ function processHybrid(qrData, barcodeData) {
       handleSuccess(secret);
     }
   } catch (err) {
-    console.error('[processHybrid] Decryption failed:', err);
+    // Silent in production
   }
 }
 
 function handleSuccess(secret) {
-  console.log('[handleSuccess] Secret:', secret);
-
   if (!batchMode) {
-    batchResults = [secret]; // Single mode: always show latest
+    batchResults = [secret];
   } else {
     batchResults.push(secret);
   }
@@ -208,9 +182,7 @@ function handleSuccess(secret) {
     detail: { secret, batchResults: [...batchResults] }
   }));
 
-  // Only stop automatically in batch mode when target reached
   if (batchMode && batchTarget > 0 && batchResults.length >= batchTarget) {
-    console.log('[handleSuccess] Batch complete → stopping');
     stopScanning();
   }
 }

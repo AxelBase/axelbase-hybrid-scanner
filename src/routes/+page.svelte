@@ -108,7 +108,6 @@
   }
 </script>
 
-<!-- GSC Meta Tags for Main Page (+page.svelte) -->
 <svelte:head>
   <title>AxelBase Hybrid Scanner – Privacy-First QR & Barcode Decryption</title>
   <meta name="description" content="Decrypt sensitive data split across QR codes and barcodes directly in your browser. Zero server upload, full local processing, batch support, and secure export options." />
