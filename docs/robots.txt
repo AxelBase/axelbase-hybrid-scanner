@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://axelbase.github.io/axelbase-hybrid-scanner/sitemap.xml
+Sitemap: https://axelbase-hybrid-scanner.vercel.app/sitemap.xml
