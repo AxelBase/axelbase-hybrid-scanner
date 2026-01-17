@@ -7,12 +7,16 @@ const config = {
     adapter: adapter({
       pages: 'docs',
       assets: 'docs',
-      fallback: 'index.html',
+      fallback: '200.html',
       precompress: false
     }),
     paths: {
       base: '/axelbase-hybrid-scanner'
     },
+    prerender: {
+      entries: ['*'],
+      handleHttpError: 'warn'
+    }
   }
 };
 
