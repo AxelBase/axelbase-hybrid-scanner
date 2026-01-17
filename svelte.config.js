@@ -1,14 +1,23 @@
 import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-export default {
+const config = {
+  preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
       pages: 'docs',
       assets: 'docs',
-      fallback: 'index.html' // 🔴 THIS IS CRITICAL
+      fallback: 'index.html',
+      precompress: false
     }),
+    paths: {
+      base: '/axelbase-hybrid-scanner'
+    },
     prerender: {
+      entries: ['*'],
       handleHttpError: 'warn'
     }
   }
 };
+
+export default config;

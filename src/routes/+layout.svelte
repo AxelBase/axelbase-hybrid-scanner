@@ -1,19 +1,13 @@
 <script lang="ts">
   import '../app.css';
   import { base } from '$app/paths';
-  import { fly } from 'svelte/transition';
-  import { onMount } from 'svelte';
+  import { fade, slide, fly } from 'svelte/transition';
 
   const currentYear = new Date().getFullYear();
   let isDropdownOpen = false;
 
-  function toggleDropdown() {
-    isDropdownOpen = !isDropdownOpen;
-  }
-
-  function closeDropdown() {
-    isDropdownOpen = false;
-  }
+  function toggleDropdown() { isDropdownOpen = !isDropdownOpen; }
+  function closeDropdown() { isDropdownOpen = false; }
 
   function toggleTheme() {
     const current = document.body.dataset.bsTheme;
@@ -26,27 +20,11 @@
         node.dispatchEvent(new CustomEvent('click_outside'));
       }
     };
-
     document.addEventListener('click', handleClick, true);
-
     return {
-      destroy() {
-        document.removeEventListener('click', handleClick, true);
-      }
+      destroy() { document.removeEventListener('click', handleClick, true); }
     };
   }
-
-  // ✅ CLIENT-ONLY LOGGING (SSR SAFE)
-  console.log('[Layout] module evaluated (SSR-safe)');
-
-  onMount(() => {
-    try {
-      console.log('[Client] +layout.svelte mounted');
-      console.log('[Client] location:', window.location.href);
-    } catch (err) {
-      console.error('[Client] onMount error', err);
-    }
-  });
 </script>
 
 <header class="fixed-top p-3 w-100" style="z-index: 1050;">
@@ -55,9 +33,7 @@
     <div class="d-flex align-items-center gap-3">
       <a href="{base}/" class="d-flex align-items-center gap-2 text-decoration-none hover-bounce">
         <img src="{base}/AxelLab-Logo.ico" alt="Logo" style="height: 32px;" />
-        <span class="fw-bold fs-5 d-none d-sm-inline" style="color: var(--primary-orange);">
-          AxelBase
-        </span>
+        <span class="fw-bold fs-5 d-none d-sm-inline" style="color: var(--primary-orange);">AxelBase</span>
       </a>
 
       <div class="position-relative" use:clickOutside on:click_outside={closeDropdown}>
@@ -71,51 +47,49 @@
         </button>
 
         {#if isDropdownOpen}
-          <div
-            class="bmac-dropdown glass mt-2 p-2"
+          <div 
+            class="bmac-dropdown glass mt-2 p-2" 
             transition:fly={{ y: -8, duration: 220 }}
           >
-            <a
-              href="https://buymeacoffee.com/axelbase"
-              target="_blank"
-              rel="noopener"
+            <a 
+              href="https://buymeacoffee.com/axelbase" 
+              target="_blank" 
+              rel="noopener" 
               on:click={closeDropdown}
               class="donation-item"
             >
               <span class="amount">$3</span> Coffee
             </a>
-
-            <a
-              href="https://buymeacoffee.com/axelbase"
-              target="_blank"
-              rel="noopener"
+            <a 
+              href="https://buymeacoffee.com/axelbase" 
+              target="_blank" 
+              rel="noopener" 
               on:click={closeDropdown}
               class="donation-item"
             >
               <span class="amount">$5</span> Two Coffees
             </a>
-
-            <a
-              href="https://buymeacoffee.com/axelbase"
-              target="_blank"
-              rel="noopener"
+            <a 
+              href="https://buymeacoffee.com/axelbase" 
+              target="_blank" 
+              rel="noopener" 
               on:click={closeDropdown}
               class="donation-item"
             >
               <span class="amount">$10</span> Big Coffee
             </a>
 
-            <a
-              href="https://buymeacoffee.com/axelbase"
-              target="_blank"
-              rel="noopener"
+            <a 
+              href="https://buymeacoffee.com/axelbase" 
+              target="_blank" 
+              rel="noopener" 
               on:click={closeDropdown}
               class="donation-item custom-amount"
             >
               Custom Amount
             </a>
 
-            <a
+            <a 
               href="bitcoin:bc1q3p0e6vt492m4w4fpz5m2cl4zcfuqqkgaj6myc9?label=AxelBase&message=Buy%20me%20a%20coffee"
               target="_blank"
               on:click={closeDropdown}
@@ -127,11 +101,7 @@
         {/if}
       </div>
 
-      <button
-        class="btn-theme-toggle glass"
-        on:click={toggleTheme}
-        aria-label="Toggle Theme"
-      >
+      <button class="btn-theme-toggle glass" on:click={toggleTheme} aria-label="Toggle Theme">
         <i class="bi bi-brightness-high-fill sun-icon"></i>
         <i class="bi bi-moon-stars-fill moon-icon"></i>
       </button>
@@ -151,18 +121,12 @@
   <slot />
 </main>
 
-<footer class="relative glass border-top py-2">
+<footer class="releative glass border-top py-2">
   <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center small">
-    <span class="opacity-75">
-      © {currentYear} AxelBase QR+Barcode Hybrid Scanner
-    </span>
+    <span class="opacity-75">© {currentYear} AxelBase QR+Barcode Hybrid Scanner</span>
     <div class="d-flex gap-3">
-      <a href="{base}/privacy" class="text-decoration-none opacity-75 hover-orange">
-        Privacy
-      </a>
-      <a href="{base}/terms" class="text-decoration-none opacity-75 hover-orange">
-        Terms
-      </a>
+      <a href="{base}/privacy" class="text-decoration-none opacity-75 hover-orange">Privacy</a>
+      <a href="{base}/terms" class="text-decoration-none opacity-75 hover-orange">Terms</a>
     </div>
   </div>
 </footer>
@@ -251,26 +215,18 @@
     overflow: hidden;
   }
 
-  .sun-icon {
-    transition: 0.5s;
+  .sun-icon { transition: 0.5s; }
+  .moon-icon { 
+    position: absolute; 
+    top: 50px; 
+    transition: 0.5s; 
   }
 
-  .moon-icon {
-    position: absolute;
-    top: 50px;
-    transition: 0.5s;
-  }
+  :global([data-bs-theme="dark"]) .sun-icon { transform: translateY(-50px); }
+  :global([data-bs-theme="dark"]) .moon-icon { top: 8px; }
 
-  :global([data-bs-theme="dark"]) .sun-icon {
-    transform: translateY(-50px);
-  }
-
-  :global([data-bs-theme="dark"]) .moon-icon {
-    top: 8px;
-  }
-
-  .hover-orange:hover {
-    color: var(--primary-orange) !important;
-    opacity: 1 !important;
+  .hover-orange:hover { 
+    color: var(--primary-orange) !important; 
+    opacity: 1 !important; 
   }
 </style>
