@@ -8,12 +8,11 @@ const config = {
     adapter: adapter({
       pages: 'docs',
       assets: 'docs',
-      fallback: '200.html',     // good choice for SPA-style fallback
+      fallback: '404.html',     // Changed for Vercel 404 handling
       precompress: false,
-      trailingSlash: 'never'
+      trailingSlash: 'always'   // Changed for clean URLs without .html rewrites
     }),
 
-    // Remove or comment out this entire block
     // paths: {
     //   base: '/axelbase-hybrid-scanner'
     // },
