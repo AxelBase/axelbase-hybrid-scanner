@@ -2,24 +2,26 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+console.log('[SvelteKit] Loading svelte.config.js');
+
 const config = {
   preprocess: vitePreprocess(),
+
   kit: {
     adapter: adapter({
-      pages: 'docs',
-      assets: 'docs',
-      fallback: '404.html',     // Changed for Vercel 404 handling
+      pages: 'build',
+      assets: 'build',
+      fallback: '200.html',
       precompress: false,
-      trailingSlash: 'always'   // Changed for clean URLs without .html rewrites
+      trailingSlash: 'never'
     }),
-
-    // paths: {
-    //   base: '/axelbase-hybrid-scanner'
-    // },
 
     prerender: {
       entries: ['*'],
-      handleHttpError: 'warn'
+      handleHttpError: ({ status, path }) => {
+        console.warn('[Prerender warning]', status, path);
+        return 'warn';
+      }
     }
   }
 };
