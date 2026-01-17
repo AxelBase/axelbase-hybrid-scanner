@@ -1,5 +1,5 @@
 {
-  "outputDirectory": "build",
-  "cleanUrls": true,
-  "trailingSlash": false
+  "framework": "sveltekit",
+  "buildCommand": "npm run build",
+  "outputDirectory": "build"
 }
