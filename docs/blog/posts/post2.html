@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AxelBase – Hybrid Scanner</title>
+    <link rel="icon" href="../../AxelLab-Logo.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AxelBase Hybrid Scanner – decrypt secure hybrid QR + barcode images" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    
+		<link href="../../_app/immutable/assets/0.C_4vpR6O.css" rel="stylesheet">
+		<link href="../../_app/immutable/assets/5.CxzsI9Js.css" rel="stylesheet">
+		<link rel="modulepreload" href="../../_app/immutable/entry/start.C2Ea9L6S.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/B5U9-KwW.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/DOaZXZpi.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/Dzr322QL.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/DMsUA7TS.js">
+		<link rel="modulepreload" href="../../_app/immutable/entry/app.B86Y3Hbt.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/a0vYZd1F.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/B44xUUgG.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/CIwJGpKH.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/BaMxsYgZ.js">
+		<link rel="modulepreload" href="../../_app/immutable/nodes/0.BRoYQpjO.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/CPMRrP3p.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/B2NjsBts.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/BCGP1ivP.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/BK4LlagK.js">
+		<link rel="modulepreload" href="../../_app/immutable/nodes/5.DP3ByOea.js">
+		<link rel="modulepreload" href="../../_app/immutable/chunks/DtniAQyI.js"><!--1apmzc4--><meta name="description" content="Technical breakdown of the encryption algorithm and key derivation process used in the AxelBase Hybrid Scanner."/> <meta property="og:title" content="AES-CBC with PBKDF2: Security Behind the Scanner | AxelBase Blog"/> <meta property="og:description" content="Technical breakdown of the encryption algorithm and key derivation process used in the AxelBase Hybrid Scanner."/> <meta property="og:url" content="../../blog/posts/post2"/> <meta property="og:type" content="article"/> <meta name="twitter:card" content="summary_large_image"/><!----><title>AES-CBC with PBKDF2: Security Behind the Scanner | AxelBase Blog</title>
+  </head>
+  <body data-bs-theme="light">
+    <div style="display: contents"><!--[--><!--[--><!----><header class="fixed-top p-3 w-100" style="z-index: 1050;"><nav class="container glass rounded-pill px-4 py-2 d-flex justify-content-between align-items-center shadow-sm"><div class="d-flex align-items-center gap-3"><a href="../../" class="d-flex align-items-center gap-2 text-decoration-none hover-bounce"><img src="../../AxelLab-Logo.ico" alt="Logo" style="height: 32px;"/> <span class="fw-bold fs-5 d-none d-sm-inline" style="color: var(--primary-orange);">AxelBase</span></a> <div class="position-relative"><button class="btn-coffee d-flex align-items-center gap-2 px-3 py-2 svelte-12qhfyh" aria-label="Support AxelBase"><i class="bi bi-cup-hot-fill"></i> <span class="d-none d-md-inline fw-semibold">Buy me a Coffee</span></button> <!--[!--><!--]--></div> <button class="btn-theme-toggle glass svelte-12qhfyh" aria-label="Toggle Theme"><i class="bi bi-brightness-high-fill sun-icon svelte-12qhfyh"></i> <i class="bi bi-moon-stars-fill moon-icon svelte-12qhfyh"></i></button></div> <ul class="nav d-none d-lg-flex align-items-center gap-2 m-0"><li><a class="nav-link-custom" href="../../">Home</a></li> <li><a class="nav-link-custom" href="../../#about">About</a></li> <li><a class="nav-link-custom" href="../../#how-to">How to use</a></li> <li><a class="nav-link-custom" href="../../#faq">FAQ</a></li> <li><a class="btn btn-pearl ms-2" href="../../blog">Blog</a></li></ul></nav></header> <main style="padding-top: 100px; padding-bottom: 80px;"><!--[--><!----><div class="container fade-in post-layout svelte-1apmzc4"><div class="breadcrumbs svelte-1apmzc4"><a href="../../blog" class="svelte-1apmzc4">Blog</a> <span>/</span> <p class="svelte-1apmzc4">AES-CBC with PBKDF2: Security Behind the Scanner</p></div> <article class="prose svelte-1apmzc4"><h1 class="svelte-1apmzc4">AES-CBC with PBKDF2: Security Behind the Scanner</h1> <p class="post-meta svelte-1apmzc4">Published: December 12, 2025</p> <p class="svelte-1apmzc4">The AxelBase Hybrid Scanner relies on proven cryptographic standards to protect sensitive data. At its core is AES encryption operating in CBC mode, combined with PBKDF2 key derivation, delivering robust security entirely within the user's browser.</p> <p class="svelte-1apmzc4">When a message is prepared for hybrid transmission, it first undergoes encryption using the Advanced Encryption Standard with a 128-bit key. CBC mode ensures that identical plaintext blocks produce different ciphertext, preventing pattern analysis. The initialization vector is derived directly from a 16-byte random salt included in the QR code.</p> <p class="svelte-1apmzc4">The key itself is not stored or transmitted. Instead, a fixed master key is strengthened using PBKDF2 with 1000 iterations of SHA-1 hashing, salted by the same random value. This process transforms the master key into a unique session key for each hybrid pair, making brute-force attacks significantly harder.</p> <h2 class="svelte-1apmzc4">How the Cryptographic Process Works</h2> <p class="svelte-1apmzc4">During decryption, the scanner reconstructs the full ciphertext by concatenating the partial data from the QR code and barcode. It then applies the same PBKDF2 derivation using the recovered salt and master key to regenerate the session key. AES decryption follows, using the salt as IV and PKCS7 padding removal to reveal the original plaintext.</p> <h3 class="svelte-1apmzc4">Security Advantages</h3> <ul class="svelte-1apmzc4"><li class="svelte-1apmzc4">Industry-standard AES encryption</li> <li class="svelte-1apmzc4">Unique key per message via salt</li> <li class="svelte-1apmzc4">No key exchange required</li> <li class="svelte-1apmzc4">Full process runs locally in browser</li></ul> <h3 class="svelte-1apmzc4">Privacy by Design</h3> <p class="svelte-1apmzc4">Because decryption occurs entirely on the user's device using CryptoJS, no data ever leaves the browser. This eliminates risks associated with server-side processing, ensuring complete end-to-end privacy even in untrusted environments.</p> <h2 class="svelte-1apmzc4">FAQ</h2> <details class="svelte-1apmzc4"><summary class="svelte-1apmzc4">Why use 1000 PBKDF2 iterations?</summary> <p class="svelte-1apmzc4">This provides adequate protection against brute-force attacks while maintaining fast decryption on modern devices.</p></details> <details class="svelte-1apmzc4"><summary class="svelte-1apmzc4">Is AES-CBC still considered secure?</summary> <p class="svelte-1apmzc4">Yes, when properly implemented with unique IVs and padding oracle mitigation, which this system achieves through salt reuse as IV.</p></details> <details class="svelte-1apmzc4"><summary class="svelte-1apmzc4">Could quantum computing break this?</summary> <p class="svelte-1apmzc4">AES-128 remains resistant to known quantum attacks via Grover's algorithm, offering decades of projected security.</p></details> <p class="italic-note svelte-1apmzc4">Strong cryptography combined with physical code separation creates defense in depth for sensitive data transfer.</p></article></div><!----><!--]--></main> <footer class="relative glass border-top py-2"><div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center small"><span class="opacity-75">© 2026 AxelBase QR+Barcode Hybrid Scanner</span> <div class="d-flex gap-3"><a href="../../privacy" class="text-decoration-none opacity-75 hover-orange svelte-12qhfyh">Privacy</a> <a href="../../terms" class="text-decoration-none opacity-75 hover-orange svelte-12qhfyh">Terms</a></div></div></footer><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_wwvl3q = {
+						base: new URL("../..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.C2Ea9L6S.js"),
+						import("../../_app/immutable/entry/app.B86Y3Hbt.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://unpkg.com/@zxing/library@0.21.0/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.js"></script>
+  </body>
+</html>
