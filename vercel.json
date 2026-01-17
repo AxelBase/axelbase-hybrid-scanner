@@ -1,8 +1,10 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)/?$",
-      "dest": "/$1.html"
+      "source": "/axelbase-hybrid-scanner/:path*",
+      "destination": "/:path*"
     }
-  ]
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
